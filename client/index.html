@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <title>Phonon</title>
+    <meta name="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="lib/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="lib/jquery-console/jquery.console.js"></script>
+    <script type="text/javascript">
+      var Phonon = require("./phonon.js");
+      var phonon = null;
+
+      $(document).ready(function(){
+         var console = $('<div class="console">');
+         $('body').append(console);
+         var controller  = console.console({
+          promptLabel: '> ',
+          commandHandle: function(line){
+            if (line) {
+              if (phonon) {
+                phonon.send(line);
+              }
+              return [{}];
+            }
+          },
+          completeHandle:function(prefix){
+            /*var commands = this.commands;
+            var ret = [];
+            for (var i=0;i<commands.length;i++) {
+              var command=commands[i];
+              if (command.lastIndexOf(prefix,0) === 0) {
+                ret.push(command.substring(prefix.length));
+              }
+            }
+            return ret;*/
+          }
+         });
+
+         var phonon = new Phonon(function(data) {
+           controller.report([{msg:data, className:"jquery-console-message-value"}]);
+         }, function() {
+           controller.report([{msg:"Connected to Pd.", className:"jquery-console-message-type"}]);
+         }, function(error) {
+           controller.report([{msg:error, className:"jquery-console-message-error"}]);
+         });
+       });
+    </script>
+    <style type="text/css" media="screen">
+      * { margin: 0px; padding: 0px; }
+      body, html { width: 100%; height: 100%; }
+      body::-webkit-scrollbar { display: none; }
+      div.console { word-wrap: break-word; width: 100%; height: 100%; }
+      /* First console */
+      div.console { font-size: 14px; }
+      div.console div.jquery-console-inner
+       { width: 100%; height: 100%; background:#333; padding:0.5em; overflow:auto; }
+      div.console div.jquery-console-prompt-box
+       { color:#fff; font-family:monospace; }
+      div.console div.jquery-console-focus span.jquery-console-cursor
+       { background:#fefefe; color:#333; font-weight:bold }
+      div.console div.jquery-console-message-error
+       { color:#ef0505; font-family:sans-serif; font-weight:bold;
+         padding:0.1em; }
+      div.console div.jquery-console-message-value
+       { color:#1ad027; font-family:monospace;
+         padding:0.1em; }
+      div.console div.jquery-console-message-type
+       { color:#52666f; font-family:monospace;
+         padding:0.1em; }
+      div.console span.jquery-console-prompt-label { font-weight:bold }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <p>
+        <strong>Please enable JavaScript or upgrade your browser.</strong>
+      </p>
+    </noscript>
+  </body>
+</html>

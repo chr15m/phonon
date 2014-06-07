@@ -1,0 +1,3 @@
+[submodule "client/lib/jquery-console"]
+	path = client/lib/jquery-console
+	url = https://github.com/chr15m/jquery-console
