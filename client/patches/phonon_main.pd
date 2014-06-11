@@ -1,4 +1,4 @@
-#N canvas 655 84 570 291 10;
+#N canvas 653 74 570 291 10;
 #X obj 347 11 loadbang;
 #X obj 237 51 netsend;
 #X floatatom 237 91 5 0 0 0 - - -;
@@ -13,7 +13,7 @@
 #N canvas 2 48 450 300 commands 1;
 #X obj 12 8 inlet;
 #X obj 12 270 outlet;
-#N canvas 106 123 450 300 open 1;
+#N canvas 105 118 450 300 open 0;
 #X obj 14 12 inlet;
 #X obj 14 34 route open;
 #X obj 71 57 outlet;
@@ -33,7 +33,7 @@
 #X obj 13 7 inlet;
 #X obj 13 29 route debug;
 #X obj 76 51 outlet;
-#X obj 13 51 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1 1
+#X obj 13 51 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
 #X msg 13 71 \; PHONON-DEBUG \$1 \;;
 #X connect 0 0 1 0;
@@ -44,15 +44,25 @@
 #X obj 114 30 t a a;
 #X obj 141 60 print phonon debug mode;
 #X obj 69 82 print command;
+#N canvas 2 48 450 300 exit 1;
+#X obj 13 7 inlet;
+#X obj 76 51 outlet;
+#X obj 13 29 route exit;
+#X msg 13 71 \; pd quit \;;
+#X connect 0 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 1 1 0;
+#X restore 12 246 pd exit;
 #X connect 0 0 3 0;
 #X connect 2 0 6 0;
 #X connect 3 0 2 0;
 #X connect 3 1 4 0;
 #X connect 4 0 9 0;
 #X connect 5 0 7 0;
-#X connect 6 0 1 0;
+#X connect 6 0 10 0;
 #X connect 7 0 4 1;
 #X connect 7 1 8 0;
+#X connect 10 0 1 0;
 #X restore 17 35 pd commands;
 #X obj 17 57 route ping;
 #X obj 74 81 print invalid command;

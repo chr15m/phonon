@@ -35,7 +35,7 @@
           }
          });
 
-         var phonon = new Phonon(function(data) {
+         phonon = new Phonon(function(data) {
            controller.report([{msg:data, className:"jquery-console-message-value"}]);
          }, function() {
            controller.report([{msg:"Connected to Pd.", className:"jquery-console-message-type"}]);
@@ -43,6 +43,17 @@
            controller.report([{msg:error, className:"jquery-console-message-error"}]);
          });
        });
+
+
+    var gui = require('nw.gui');
+    var win = gui.Window.get();
+    // catch window close
+    win.on('close', function () {
+      if (phonon) {
+        phonon.exit();
+      }
+      this.close(true);
+    });
     </script>
     <style type="text/css" media="screen">
       * { margin: 0px; padding: 0px; }

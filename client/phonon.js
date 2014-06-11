@@ -1,4 +1,5 @@
 var port = require('port');
+var child = require('child_process');
 
 function Phonon(receive_function, connect_function, stderr_function) {
 	var pd_socket = null;
@@ -22,6 +23,12 @@ function Phonon(receive_function, connect_function, stderr_function) {
 	.on('stderr', stderr_function)
 	.create();
         
+	this.exit = function() {
+		if (pd_socket) {
+			pd_socket.write("exit;\n");
+		}	 
+	}
+	
 	this.send = function(line) {
 		if (pd_socket) {
 			pd_socket.write(line + ";\n");
