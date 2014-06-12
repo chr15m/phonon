@@ -1,7 +1,7 @@
 var port = require('port');
 var child_process = require('child_process');
 
-function Phonon(receive_function, connect_function, stderr_function) {
+function Phonon(receive_function, stderr_function, connect_function, quit_function) {
 	var pd_socket = null;
 	
 	port({
@@ -23,10 +23,14 @@ function Phonon(receive_function, connect_function, stderr_function) {
 	.on('stderr', stderr_function)
 	.create();
         
-	this.exit = function() {
+	this.quit = function(propagate) {
 		if (pd_socket) {
-			pd_socket.write("exit;\n");
-		}	 
+			pd_socket.write("quit;\n");
+		}
+		// defaults to true
+		if (propagate != false) {
+			quit_function();
+		}
 	}
 	
 	this.send = function(line) {
@@ -54,6 +58,8 @@ function Phonon(receive_function, connect_function, stderr_function) {
 				}
 				buffers['stderr'] = lines[lines.length] ? lines[lines.length] : "";*/
 			});
+		} else if (line.split(" ")[0] == "quit") {
+			this.quit();
 		} else {
 			if (pd_socket) {
 				pd_socket.write(line + ";\n");

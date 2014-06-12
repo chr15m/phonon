@@ -1,4 +1,4 @@
-#N canvas 653 74 570 291 10;
+#N canvas 652 69 570 291 10;
 #X obj 347 11 loadbang;
 #X obj 237 51 netsend;
 #X floatatom 237 91 5 0 0 0 - - -;
@@ -10,7 +10,7 @@
 #X obj 17 81 t b b a;
 #X obj 17 188 list append;
 #X obj 17 210 list trim;
-#N canvas 2 48 450 300 commands 1;
+#N canvas 2 48 450 300 commands 0;
 #X obj 12 8 inlet;
 #X obj 12 270 outlet;
 #N canvas 105 118 450 300 open 0;
@@ -44,15 +44,15 @@
 #X obj 114 30 t a a;
 #X obj 141 60 print phonon debug mode;
 #X obj 69 82 print command;
-#N canvas 2 48 450 300 exit 1;
+#N canvas 2 48 450 300 quit 0;
 #X obj 13 7 inlet;
 #X obj 76 51 outlet;
-#X obj 13 29 route exit;
 #X msg 13 71 \; pd quit \;;
-#X connect 0 0 2 0;
-#X connect 2 0 3 0;
-#X connect 2 1 1 0;
-#X restore 12 246 pd exit;
+#X obj 13 29 route quit;
+#X connect 0 0 3 0;
+#X connect 3 0 2 0;
+#X connect 3 1 1 0;
+#X restore 12 246 pd quit;
 #X connect 0 0 3 0;
 #X connect 2 0 6 0;
 #X connect 3 0 2 0;
