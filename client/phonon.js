@@ -37,6 +37,7 @@ function Phonon(receive_function, stderr_function, connect_function, quit_functi
 	}
 	
 	this.send = function(line) {
+		var args = line.split(" ");
 		if (line[0] == "!") {
 			var args = line.substr(1).split(" ");
 			var child = child_process.exec(line.substr(1), function (error, stdout, stderr) {
@@ -47,13 +48,58 @@ function Phonon(receive_function, stderr_function, connect_function, quit_functi
 				//	console.log(error);
 				//}
 			});
-		} else if (line.split(" ")[0] == "quit") {
-			this.quit();
+		} else if (args[0] in commands) {
+			var cmd_name = args.shift();
+			var cmd = commands[cmd_name];
+			if (cmd.fn) {
+				if (!cmd["params"] || (cmd.params.length == args.length)) {
+					cmd.fn.apply(this, args);
+				} else {
+					stderr_function("Incorrect number of arguments - should be " + cmd.params.length + ".");
+				}
+			} else {
+				stderr_function("No function exists for command " + cmd_name);
+			}
 		} else {
 			if (pd_socket && pd_socket.writable) {
 				pd_socket.write(line + ";\n");
 			} else {
 				stderr_function("Pd not connected/running.");
+			}
+		}
+	}
+	
+	var commands = {
+		"help": {
+			"help": "Invoke this help.",
+			"fn": function() {
+				for (var c in commands) {
+					receive_function(c + " - " + commands[c].help);
+					if (commands[c]["params"]) {
+						for (var p=0; p<commands[c].params.length; p++) {
+							for (var pr in commands[c].params[p]) {
+								receive_function("\t" + pr + ": " + commands[c].params[p][pr]);
+							}
+						}
+					}
+					receive_function("\n");
+				}
+			}
+		},
+		"open": {
+			"help": "Ask Pd to open a patch.",
+			"params": [
+				{"path": "Path to patch e.g. 'test.pd' or '/home/user/mypatch.pd'."}
+			],
+			"fn": function(path) {
+				var components = path.split("/");
+				pd_socket.write("open " + components.pop() + " " + components.join("/") + ";\n");
+			}
+		},
+		"quit": {
+			"help": "Close everything and exit.",
+			"fn": function() {
+				this.quit();
 			}
 		}
 	}
