@@ -1,0 +1,12 @@
+{
+	"name": "phonon",
+	"author": "Chris McCormick <chris@mccormick.cx>",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/chr15m/phonon"
+	},
+	"dependencies": {
+		"port": "*"
+	},
+	"license": "GPLv3"
+}
