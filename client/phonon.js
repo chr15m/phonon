@@ -36,27 +36,13 @@ function Phonon(receive_function, stderr_function, connect_function, quit_functi
 	this.send = function(line) {
 		if (line[0] == "!") {
 			var args = line.substr(1).split(" ");
-			var child = child_process.spawn(args.shift(), args);
-			var buffers = {"stdout": "", "stderr": ""};
-			
-			child.stdout.on('data', function (buffer) {
-				receive_function(buffer.toString());
-				/*buffers['stdout'] += buffer.toString();
-				var lines = buffers['stdout'].split("\n");
-				for (var l=0; l<lines-1; l++) {
-					receive_function(lines[l]);
-				}
-				buffers['stdout'] = lines[lines.length] ? lines[lines.length] : "";*/
-			});
-			// child.stdout.on('end', end);
-			child.stderr.on('data', function (buffer) {
-				stderr_function(buffer.toString());
-				/*buffers['stderr'] += buffer.toString();
-				var lines = buffers['stderr'].split("\n");
-				for (var l=0; l<lines-1; l++) {
-					stderr_function(lines[l]);
-				}
-				buffers['stderr'] = lines[lines.length] ? lines[lines.length] : "";*/
+			var child = child_process.exec(line.substr(1), function (error, stdout, stderr) {
+				stderr_function(stderr);
+				receive_function(stdout);
+				//if (error) {
+				//	stderr_function(error);
+				//	console.log(error);
+				//}
 			});
 		} else if (line.split(" ")[0] == "quit") {
 			this.quit();
