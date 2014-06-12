@@ -17,6 +17,9 @@ function Phonon(receive_function, stderr_function, connect_function, quit_functi
 	})
 	.on('connect', function(socket) {
 		pd_socket = socket;
+		pd_socket.on('close', function(had_error) {
+			quit_function();
+		});
 		connect_function();
 	})
 	.on('data', receive_function)
@@ -24,7 +27,7 @@ function Phonon(receive_function, stderr_function, connect_function, quit_functi
 	.create();
         
 	this.quit = function(propagate) {
-		if (pd_socket) {
+		if (pd_socket && pd_socket.writable) {
 			pd_socket.write("quit;\n");
 		}
 		// defaults to true
@@ -47,7 +50,7 @@ function Phonon(receive_function, stderr_function, connect_function, quit_functi
 		} else if (line.split(" ")[0] == "quit") {
 			this.quit();
 		} else {
-			if (pd_socket) {
+			if (pd_socket && pd_socket.writable) {
 				pd_socket.write(line + ";\n");
 			} else {
 				stderr_function("Pd not connected/running.");
