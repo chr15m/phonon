@@ -74,16 +74,17 @@ function Phonon(receive_function, stderr_function, connect_function, quit_functi
 			"help": "Invoke this help.",
 			"fn": function() {
 				for (var c in commands) {
-					receive_function(c + " - " + commands[c].help);
+					receive_function(c + "\t\t" + commands[c].help);
 					if (commands[c]["params"]) {
 						for (var p=0; p<commands[c].params.length; p++) {
 							for (var pr in commands[c].params[p]) {
-								receive_function("\t" + pr + ": " + commands[c].params[p][pr]);
+								receive_function("\t\t" + pr + ": " + commands[c].params[p][pr]);
 							}
 						}
 					}
 					receive_function("\n");
 				}
+				receive_function("!command\tRun a shell command.\n");
 			}
 		},
 		"open": {
