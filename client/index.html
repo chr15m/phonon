@@ -13,9 +13,9 @@
 			var phonon = null;
 			
 			$(document).ready(function(){
-				var console = $('<div class="console">');
-				$('body').append(console);
-				var controller	= console.console({
+				var console_container = $('<div class="console">');
+				$('body').append(console_container);
+				var controller	= console_container.console({
 					promptLabel: '> ',
 					commandHandle: function(line){
 						if (line) {
