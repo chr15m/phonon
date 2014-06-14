@@ -39,11 +39,17 @@
 				});
 
 				phonon = new Phonon(function(data) {
-					controller.report([{msg:data, className:"jquery-console-message-value"}]);
+					setTimeout(function() {
+						controller.report([{msg:data, className:"jquery-console-message-value"}]);
+					}, 0);
 				}, function(error) {
-					controller.report([{msg:error, className:"jquery-console-message-error"}]);
+					setTimeout(function() {
+						controller.report([{msg:error, className:"jquery-console-message-error"}]);
+					}, 0);
 				}, function() {
-					controller.report([{msg:"Connected to Pd.", className:"jquery-console-message-type"}]);
+					setTimeout(function() {
+						controller.report([{msg:"Connected to Pd.", className:"jquery-console-message-type"}]);
+					}, 0);
 				}, function() {
 					window.close();
 				});
