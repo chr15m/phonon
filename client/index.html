@@ -37,7 +37,7 @@
 						return ret;*/
 					}
 				});
-
+				
 				phonon = new Phonon(function(data) {
 					setTimeout(function() {
 						controller.report([{msg:data, className:"jquery-console-message-value"}]);
@@ -52,6 +52,15 @@
 					}, 0);
 				}, function() {
 					window.close();
+				});
+				
+				// go full screen if the user presses F11
+				$(document).on("keyup", function(ev) {
+					// toggle fullscreen on F11
+					if (ev.keyCode == 122) {
+						// console.log(ev.keyCode);
+						win.isFullscreen = !win.isFullscreen;
+					}
 				});
 			});
 
