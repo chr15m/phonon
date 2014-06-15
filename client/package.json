@@ -2,8 +2,6 @@
 	"name": "Phonon",
 	"main": "index.html",
 	"window": {
-		"min_width": 800,
-		"min_height": 600,
 		"toolbar": false,
 		"icon": "phonon.png"
 	}
